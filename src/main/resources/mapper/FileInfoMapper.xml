@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.fyzzz.panserver.mapper.FileInfoMapper">
+
+    <resultMap id="fileInfoVoMap" type="cn.fyzzz.panserver.model.vo.FileInfoVo" autoMapping="true">
+        <id column="id" property="id"/>
+        <result column="is_delete" property="deleted"/>
+        <association property="owner" javaType="cn.fyzzz.panserver.model.pojo.UserInfo" autoMapping="true">
+            <id column="u_id" property="id"/>
+        </association>
+    </resultMap>
+
+    <select id="getFileInfoList" resultMap="fileInfoVoMap"
+            parameterType="cn.fyzzz.panserver.model.pojo.FileInfo">
+        select f.id,user_id,file_name,file_path,
+        file_upload_name,remark,f.is_delete,f.create_time,
+        u.id as u_id,u.user_name
+        from file_info f left join user_info u on f.user_id = u.id
+        <where>
+            f.is_delete = 0
+            <if test="id != null">
+                and f.id = #{id}
+            </if>
+            <if test="userId != null">
+                and f.user_id = #{userId}
+            </if>
+            <if test="fileUploadName != null and fileUploadName != ''">
+                and locate(#{fileUploadName},file_upload_name) > 0
+            </if>
+            <if test="remark != null and remark != ''">
+                and locate(#{remark},remark) > 0
+            </if>
+        </where>
+        order by f.id desc
+    </select>
+
+</mapper>
