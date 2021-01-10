@@ -67,7 +67,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .failureHandler((request,response,e) -> {
                     ObjectMapper mapper = new ObjectMapper();
                     //先设置编码，再获取输出流
-                    response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+                    response.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
                     PrintWriter out = response.getWriter();
                     out.write(mapper.writeValueAsString(SysResult.error(e.getMessage())));
                     out.flush();
@@ -78,7 +78,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     ObjectMapper mapper = new ObjectMapper();
                     //先设置编码，再获取输出流
                     httpServletResponse.setStatus(HttpStatus.OK.value());
-                    httpServletResponse.setContentType(MediaType.APPLICATION_JSON_VALUE);
+                    httpServletResponse.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
                     PrintWriter out = httpServletResponse.getWriter();
                     out.write(mapper.writeValueAsString(SysResult.ok(authentication != null ? authentication.getPrincipal() : null)));
                     out.flush();
@@ -96,7 +96,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     ObjectMapper mapper = new ObjectMapper();
                     //先设置编码，再获取输出流
                     httpServletResponse.setStatus(HttpStatus.OK.value());
-                    httpServletResponse.setContentType(MediaType.APPLICATION_JSON_VALUE);
+                    httpServletResponse.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
                     PrintWriter out = httpServletResponse.getWriter();
                     out.write(mapper.writeValueAsString(SysResult.ok()));
                     out.flush();
@@ -108,7 +108,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     ObjectMapper mapper = new ObjectMapper();
                     //先设置编码，再获取输出流
                     response.setStatus(HttpStatus.UNAUTHORIZED.value());
-                    response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+                    response.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
                     PrintWriter out = response.getWriter();
                     out.write(mapper.writeValueAsString(SysResult.error("登录信息过期，请重新登录。")));
                     out.flush();
@@ -120,7 +120,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     ObjectMapper mapper = new ObjectMapper();
                     //先设置编码，再获取输出流
                     response.setStatus(HttpStatus.UNAUTHORIZED.value());
-                    response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+                    response.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
                     PrintWriter out = response.getWriter();
                     out.write(mapper.writeValueAsString(SysResult.error("您未登录，请重新登录。")));
                     out.flush();
