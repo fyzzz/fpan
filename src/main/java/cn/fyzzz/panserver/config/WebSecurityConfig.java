@@ -16,7 +16,6 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.cors.CorsConfiguration;
 
 import java.io.PrintWriter;
 
@@ -139,9 +138,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(WebSecurity web) throws Exception {
         if(DEV.equals(profile)){
-//            web.ignoring()
-//                    .antMatchers("/trackerType/**")
-//                    .antMatchers("/moneyTracker/**");
+            web.ignoring()
+                    .antMatchers("/debug/**");
         }
         web.ignoring()
                 .antMatchers("/swagger-ui.html")

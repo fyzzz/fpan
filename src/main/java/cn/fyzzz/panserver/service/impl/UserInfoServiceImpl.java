@@ -6,11 +6,12 @@ import cn.fyzzz.panserver.model.pojo.UserInfo;
 import cn.fyzzz.panserver.service.UserInfoService;
 import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 /**
@@ -22,10 +23,12 @@ import org.springframework.stereotype.Service;
  * 2019-08-15
  */
 @Service("userInfoService")
+@AllArgsConstructor
 public class UserInfoServiceImpl implements UserInfoService, UserDetailsService {
 
-    @Autowired
-    private UserInfoMapper userInfoMapper;
+    private final UserInfoMapper userInfoMapper;
+
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -45,5 +48,19 @@ public class UserInfoServiceImpl implements UserInfoService, UserDetailsService 
             throw new ServiceException("您未登录，请先登录！");
         }
         return ObjectUtil.cloneByStream((UserInfo)userDetails);
+    }
+
+    @Override
+    public void updatePassword(String newPassword, String oldPassword, Integer userId) {
+        UserInfo userInfo = userInfoMapper.selectById(userId);
+        if(userInfo == null){
+            throw new ServiceException("修改密码，用户id不存在！");
+        }
+        if (!passwordEncoder.matches(oldPassword,userInfo.getUserPassword())) {
+            throw new ServiceException("修改密码，原密码错误！");
+        }
+        UserInfo update = new UserInfo();
+        update.setId(userId).setUserPassword(passwordEncoder.encode(newPassword));
+        userInfoMapper.updateById(update);
     }
 }
