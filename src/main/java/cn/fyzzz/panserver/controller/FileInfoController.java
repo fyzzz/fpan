@@ -6,6 +6,7 @@ import cn.fyzzz.panserver.model.pojo.FileInfo;
 import cn.fyzzz.panserver.model.SysResult;
 import cn.fyzzz.panserver.service.FileInfoService;
 import cn.fyzzz.panserver.service.UserInfoService;
+import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -28,6 +29,7 @@ import java.util.UUID;
  * @author fyzzz
  * 2019-09-11
  */
+@Api(tags = "文件接口")
 @Slf4j
 @RestController
 @RequestMapping("/fileInfo")
@@ -47,13 +49,13 @@ public class FileInfoController {
             @RequestBody FileInfo fileInfo
     ){
         // 暂时只查自己的
-        fileInfo.setUserId(userInfoService.currentUser().getId());
+        fileInfo.setUserId(userInfoService.currentUserId());
         return SysResult.ok(fileInfoService.page(pageNum,pageSize,fileInfo));
     }
 
     @PostMapping("/save")
     public SysResult save(@RequestBody FileInfo fileInfo){
-        fileInfo.setUserId(userInfoService.currentUser().getId());
+        fileInfo.setUserId(userInfoService.currentUserId());
         return SysResult.ok(fileInfoService.saveOrUpdate(fileInfo));
     }
 

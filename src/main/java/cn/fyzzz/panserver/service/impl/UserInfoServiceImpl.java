@@ -51,6 +51,15 @@ public class UserInfoServiceImpl implements UserInfoService, UserDetailsService 
     }
 
     @Override
+    public Integer currentUserId() {
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if(userDetails == null){
+            throw new ServiceException("您未登录，请先登录！");
+        }
+        return ((UserInfo) userDetails).getId();
+    }
+
+    @Override
     public void updatePassword(String newPassword, String oldPassword, Integer userId) {
         UserInfo userInfo = userInfoMapper.selectById(userId);
         if(userInfo == null){

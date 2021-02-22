@@ -14,6 +14,8 @@ public interface UserInfoService {
 
     UserInfo currentUser();
 
+    Integer currentUserId();
+
     /**
      * 修改密码接口
      * @param newPassword 新密码

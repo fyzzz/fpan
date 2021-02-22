@@ -12,7 +12,7 @@
 
     <select id="getFileInfoList" resultMap="fileInfoVoMap"
             parameterType="cn.fyzzz.panserver.model.pojo.FileInfo">
-        select f.id,user_id,file_name,file_path,
+        select f.id,user_id,file_name,file_path,file_size,
         file_upload_name,remark,f.is_delete,f.create_time,
         u.id as u_id,u.user_name
         from file_info f left join user_info u on f.user_id = u.id

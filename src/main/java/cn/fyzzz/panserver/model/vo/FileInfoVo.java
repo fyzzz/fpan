@@ -19,6 +19,11 @@ public class FileInfoVo extends FileInfo {
 
     private UserInfo owner;
 
+    /**
+     * 格式化后的文件大小
+     */
+    private String fileSizeFormat;
+
 
 
 }

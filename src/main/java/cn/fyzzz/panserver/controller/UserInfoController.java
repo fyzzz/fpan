@@ -4,6 +4,7 @@ package cn.fyzzz.panserver.controller;
 import cn.fyzzz.panserver.model.SysResult;
 import cn.fyzzz.panserver.model.vo.UserPasswordVo;
 import cn.fyzzz.panserver.service.UserInfoService;
+import io.swagger.annotations.Api;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author fyzzz
  * 2019-08-15
  */
+@Api(tags = "用户接口")
 @RestController
 @RequestMapping("/user-info")
 @AllArgsConstructor
@@ -27,7 +29,7 @@ public class UserInfoController {
 
     @PutMapping("/updatePassword")
     public SysResult update(@RequestBody UserPasswordVo userPasswordVo){
-        userInfoService.updatePassword(userPasswordVo.getNewPassword(), userPasswordVo.getOldPassword(),userInfoService.currentUser().getId());
+        userInfoService.updatePassword(userPasswordVo.getNewPassword(), userPasswordVo.getOldPassword(),userInfoService.currentUserId());
         return SysResult.ok();
     }
 

@@ -44,6 +44,11 @@ public class FileInfo implements Serializable {
     private String fileUploadName;
 
     /**
+    * 文件大小，字节
+    */
+    private Integer fileSize;
+
+    /**
     * 备注
     */
     private String remark;
