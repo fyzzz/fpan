@@ -36,6 +36,8 @@ public class DailyRecordServiceImpl extends ServiceImpl<DailyRecordMapper, Daily
     @Override
     public PageInfo<DailyRecord> page(int pageNum, int pageSize, DailyRecord dailyRecord) {
         PageHelper.startPage(pageNum,pageSize);
-        return new PageInfo<>(baseMapper.selectList(new QueryWrapper<>(dailyRecord)));
+        QueryWrapper<DailyRecord> wrapper = new QueryWrapper<>(dailyRecord);
+        wrapper.orderByDesc("id");
+        return new PageInfo<>(baseMapper.selectList(wrapper));
     }
 }

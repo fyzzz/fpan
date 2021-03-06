@@ -1,13 +1,14 @@
 package cn.fyzzz.panserver.model.pojo;
 
 import com.baomidou.mybatisplus.annotation.IdType;
-    import java.time.LocalDate;
-    import com.baomidou.mybatisplus.annotation.TableId;
-    import java.time.LocalDateTime;
-    import java.io.Serializable;
-    import lombok.Data;
-    import lombok.EqualsAndHashCode;
-    import lombok.experimental.Accessors;
+import com.baomidou.mybatisplus.annotation.TableId;
+import java.io.Serializable;
+import java.time.LocalDate;
+import java.util.Date;
+
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.experimental.Accessors;
 
 /**
 * <p>
@@ -53,12 +54,12 @@ public class DailyRecord implements Serializable {
     /**
     *  创建时间
     */
-    private LocalDateTime createTime;
+    private Date createTime;
 
     /**
     *  修改时间
     */
-    private LocalDateTime updateTime;
+    private Date updateTime;
 
 
 }
