@@ -2,7 +2,7 @@ package cn.fyzzz.panserver.controller;
 
 
 import cn.fyzzz.panserver.model.SysResult;
-import cn.fyzzz.panserver.model.pojo.DailyRecord;
+import cn.fyzzz.panserver.model.DO.DailyRecord;
 import cn.fyzzz.panserver.service.DailyRecordService;
 import cn.fyzzz.panserver.service.UserInfoService;
 import io.swagger.annotations.Api;

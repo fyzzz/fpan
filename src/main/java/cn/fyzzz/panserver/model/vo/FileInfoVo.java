@@ -1,7 +1,7 @@
 package cn.fyzzz.panserver.model.vo;
 
-import cn.fyzzz.panserver.model.pojo.FileInfo;
-import cn.fyzzz.panserver.model.pojo.UserInfo;
+import cn.fyzzz.panserver.model.DO.FileInfo;
+import cn.fyzzz.panserver.model.DO.UserInfo;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;

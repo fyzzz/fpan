@@ -2,7 +2,7 @@ package cn.fyzzz.panserver.service.impl;
 
 import cn.fyzzz.panserver.exception.ServiceException;
 import cn.fyzzz.panserver.mapper.UserInfoMapper;
-import cn.fyzzz.panserver.model.pojo.UserInfo;
+import cn.fyzzz.panserver.model.DO.UserInfo;
 import cn.fyzzz.panserver.service.UserInfoService;
 import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;

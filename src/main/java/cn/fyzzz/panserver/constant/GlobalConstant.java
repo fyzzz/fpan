@@ -6,6 +6,8 @@ package cn.fyzzz.panserver.constant;
  */
 public class GlobalConstant {
 
+    private GlobalConstant() { }
+
     public static final Integer SUCCESS = 1;
 
     public static final Integer FAILURE = 2;

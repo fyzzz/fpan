@@ -1,6 +1,6 @@
 package cn.fyzzz.panserver.service;
 
-import cn.fyzzz.panserver.model.pojo.DailyRecord;
+import cn.fyzzz.panserver.model.DO.DailyRecord;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.github.pagehelper.PageInfo;
 

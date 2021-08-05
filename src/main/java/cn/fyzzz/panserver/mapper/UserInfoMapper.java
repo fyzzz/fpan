@@ -1,6 +1,6 @@
 package cn.fyzzz.panserver.mapper;
 
-import cn.fyzzz.panserver.model.pojo.UserInfo;
+import cn.fyzzz.panserver.model.DO.UserInfo;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.springframework.stereotype.Repository;
 

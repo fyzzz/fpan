@@ -1,6 +1,6 @@
 package cn.fyzzz.panserver.mapper;
 
-import cn.fyzzz.panserver.model.pojo.FileInfo;
+import cn.fyzzz.panserver.model.DO.FileInfo;
 import cn.fyzzz.panserver.model.vo.FileInfoVo;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.springframework.stereotype.Repository;
