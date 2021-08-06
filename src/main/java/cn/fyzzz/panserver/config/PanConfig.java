@@ -14,14 +14,12 @@ import org.springframework.stereotype.Component;
 @ConfigurationProperties(prefix = "pan")
 public class PanConfig {
 
-    private String storageType;
-
     private LocalStorageConfig localStorage;
 
     private DatabaseConfig database;
 
     @Data
-    static class DatabaseConfig {
+    public static class DatabaseConfig {
 
         private String host;
 
@@ -36,4 +34,14 @@ public class PanConfig {
     }
 
 
+    /**
+     * @author fyzzz
+     * 2021/8/5 2:35 下午
+     */
+    @Data
+    public static class LocalStorageConfig {
+
+        private String rootPath;
+
+    }
 }

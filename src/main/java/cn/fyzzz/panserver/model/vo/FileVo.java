@@ -1,6 +1,9 @@
 package cn.fyzzz.panserver.model.vo;
 
+import cn.fyzzz.panserver.constant.FileTypeEnum;
 import lombok.Data;
+
+import java.util.Date;
 
 /**
  * @author fyzzz
@@ -9,6 +12,12 @@ import lombok.Data;
 @Data
 public class FileVo {
 
-
+    private String name;
+    private Long size;
+    private String sizeText;
+    private FileTypeEnum type;
+    private String path;
+    private String url;
+    private Date lastModified;
 
 }
