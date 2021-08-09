@@ -28,30 +28,39 @@ public class FileInfo implements Serializable {
 
     private Integer userId;
 
+    private Integer storageId;
+
     /**
     * 文件名
     */
-    private String fileName;
+    private String name;
 
     /**
     * 文件路径
     */
-    private String filePath;
-
-    /**
-    * 文件上传名
-    */
-    private String fileUploadName;
+    private String path;
 
     /**
     * 文件大小，字节
     */
-    private Integer fileSize;
+    private Integer size;
 
     /**
-    * 备注
+    * 属性，文件 or 目录
     */
-    private String remark;
+    private String digestCode;
+
+    /**
+     * 文件id，local就是文件摘要
+     */
+    private String fileId;
+
+    /**
+     * 类型
+     */
+    private String type;
+
+    private String  abstractMethod;
 
     /**
      * 是否删除

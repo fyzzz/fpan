@@ -45,8 +45,7 @@ public class FileInfoServiceImpl extends ServiceImpl<FileInfoMapper, FileInfo> i
         QueryWrapper<FileInfo> wrapper = new QueryWrapper<>();
         wrapper.eq(fileInfo.getId() != null,"id",fileInfo.getId());
         wrapper.eq(fileInfo.getUserId() != null,"user_id",fileInfo.getUserId());
-        wrapper.apply(StringUtils.hasLength(fileInfo.getFileUploadName()),"locate({0},file_upload_name)>0",fileInfo.getFileUploadName());
-        wrapper.apply(StringUtils.hasLength(fileInfo.getRemark()),"locate({0},remark)>0",fileInfo.getRemark());
+//        wrapper.apply(StringUtils.hasLength(fileInfo.getRemark()),"locate({0},remark)>0",fileInfo.getRemark());
         wrapper.orderByDesc("id");
         return wrapper;
     }
@@ -55,7 +54,7 @@ public class FileInfoServiceImpl extends ServiceImpl<FileInfoMapper, FileInfo> i
     public void delete(int id) {
         //删除文件
         FileInfo fileInfo = this.getById(id);
-        File file = new File(fileInfo.getFilePath(),fileInfo.getFileName());
+        File file = new File(fileInfo.getPath(),fileInfo.getName());
         if(file.exists()){
             FileUtil.deleteFileAndEmptyParent(file);
         }

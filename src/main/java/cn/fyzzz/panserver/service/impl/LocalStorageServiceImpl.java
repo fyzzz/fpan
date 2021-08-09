@@ -1,7 +1,7 @@
 package cn.fyzzz.panserver.service.impl;
 
 import cn.fyzzz.panserver.config.PanConfig;
-import cn.fyzzz.panserver.constant.FileTypeEnum;
+import cn.fyzzz.panserver.constant.FileAttributeEnum;
 import cn.fyzzz.panserver.exception.ServiceException;
 import cn.fyzzz.panserver.model.vo.FileVo;
 import cn.fyzzz.panserver.service.StorageService;
@@ -48,7 +48,7 @@ public class LocalStorageServiceImpl implements StorageService {
         }
         for (File f : files) {
             FileVo fileVo = new FileVo();
-            fileVo.setType(f.isDirectory() ? FileTypeEnum.FOLDER : FileTypeEnum.FILE);
+            fileVo.setType(f.isDirectory() ? FileAttributeEnum.FOLDER : FileAttributeEnum.FILE);
             fileVo.setLastModified(new Date(f.lastModified()));
             fileVo.setSize(f.length());
             fileVo.setName(f.getName());

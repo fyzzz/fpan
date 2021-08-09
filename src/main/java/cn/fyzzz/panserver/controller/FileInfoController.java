@@ -83,9 +83,9 @@ public class FileInfoController {
             log.error("文件上传失败！",e);
         }
         FileInfo fileInfo = new FileInfo();
-        fileInfo.setFileUploadName(uploadFileName);
-        fileInfo.setFileName(fileName);
-        fileInfo.setFilePath(uploadDir.getAbsolutePath());
+//        fileInfo.setFileUploadName(uploadFileName);
+        fileInfo.setName(fileName);
+        fileInfo.setPath(uploadDir.getAbsolutePath());
         fileInfoService.save(fileInfo);
         return SysResult.ok(fileInfo.getId());
     }
@@ -102,13 +102,13 @@ public class FileInfoController {
         if(fileInfo == null){
             return;
         }
-        File file = new File(fileInfo.getFilePath(),fileInfo.getFileName());
+        File file = new File(fileInfo.getPath(),fileInfo.getName());
         if(file.exists() && file.isFile()){
             response.reset();
             response.setContentType("application/force-download");
             // 设置文件名
             try {
-                response.addHeader("Content-Disposition", "attachment;fileName=" + URLEncoder.encode(fileInfo.getFileUploadName(),"UTF-8"));
+                response.addHeader("Content-Disposition", "attachment;fileName=" + URLEncoder.encode(fileInfo.getName(),"UTF-8"));
             } catch (UnsupportedEncodingException e) {
                 log.error("文件下载失败",e);
             }

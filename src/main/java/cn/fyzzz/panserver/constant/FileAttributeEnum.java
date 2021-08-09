@@ -11,7 +11,7 @@ import lombok.Getter;
  */
 @Getter
 @AllArgsConstructor
-public enum FileTypeEnum {
+public enum FileAttributeEnum {
 
     /**
      * 文件
