@@ -2,7 +2,7 @@ package cn.fyzzz.panserver.controller;
 
 
 import cn.fyzzz.panserver.exception.ServiceException;
-import cn.fyzzz.panserver.model.DO.FileInfo;
+import cn.fyzzz.panserver.model.model.FileInfo;
 import cn.fyzzz.panserver.model.SysResult;
 import cn.fyzzz.panserver.service.FileInfoService;
 import cn.fyzzz.panserver.service.UserInfoService;

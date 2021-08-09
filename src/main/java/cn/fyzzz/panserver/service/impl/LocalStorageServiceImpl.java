@@ -9,8 +9,12 @@ import cn.hutool.core.io.FileUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
+import javax.servlet.http.HttpServletResponse;
+import java.io.*;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -86,6 +90,52 @@ public class LocalStorageServiceImpl implements StorageService {
     public void delete(String path) {
         File file = new File(panConfig.getLocalStorage().getRootPath(), path);
         FileUtil.del(file);
+    }
+
+    @Override
+    public void upload(String path, MultipartFile uploadFile) throws IOException {
+        File dir = new File(panConfig.getLocalStorage().getRootPath(), path);
+        if (!dir.exists() || !dir.isDirectory()) {
+            throw new ServiceException("目录不存在");
+        }
+        String uploadFileName = uploadFile.getOriginalFilename();
+        if(!StringUtils.hasLength(uploadFileName)){
+            throw new ServiceException("上传文件名为空");
+        }
+        uploadFile.transferTo(new File(dir.getAbsolutePath(), uploadFileName));
+    }
+
+    @Override
+    public void download(String path, HttpServletResponse response) {
+        File file = new File(panConfig.getLocalStorage().getRootPath(), path);
+        if(!file.exists()){
+            throw new ServiceException("文件不存在");
+        }
+        if (file.isDirectory()){
+            // todo 考虑下载文件夹怎么做
+            throw new ServiceException("暂不支持下载文件夹");
+        }
+        response.reset();
+        response.setContentType("application/force-download");
+        // 设置文件名
+        try {
+            response.addHeader("Content-Disposition", "attachment;fileName=" + URLEncoder.encode(file.getName(),"UTF-8"));
+        } catch (UnsupportedEncodingException e) {
+            log.error("文件下载失败", e);
+        }
+
+        byte[] buffer = new byte[1024];
+        try(FileInputStream fis = new FileInputStream(file);
+            BufferedInputStream bis = new BufferedInputStream(fis)) {
+            OutputStream os = response.getOutputStream();
+            int i = bis.read(buffer);
+            while (i != -1) {
+                os.write(buffer, 0, i);
+                i = bis.read(buffer);
+            }
+        } catch (IOException e) {
+            log.error("文件下载失败",e);
+        }
     }
 
 }

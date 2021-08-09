@@ -1,4 +1,4 @@
-package cn.fyzzz.panserver.model.DO;
+package cn.fyzzz.panserver.model.model;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;

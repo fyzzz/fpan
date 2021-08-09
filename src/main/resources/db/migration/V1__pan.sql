@@ -1,4 +1,4 @@
-DROP TABLE IF EXISTS `file_info`;
+DROP TABLE IF EXISTS file_info_bak;
 CREATE TABLE `file_info` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `file_name` varchar(50) DEFAULT NULL COMMENT '文件名',
@@ -9,7 +9,7 @@ CREATE TABLE `file_info` (
   `create_time` datetime DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=41 DEFAULT CHARSET=utf8mb4 COMMENT='文件信息';
-alter table file_info
+alter table file_info_bak
 	add user_id int null comment '归属人id' after id;
 
 

@@ -1,6 +1,6 @@
 package cn.fyzzz.panserver.service;
 
-import cn.fyzzz.panserver.model.DO.UserInfo;
+import cn.fyzzz.panserver.model.model.UserInfo;
 
 /**
  * <p>

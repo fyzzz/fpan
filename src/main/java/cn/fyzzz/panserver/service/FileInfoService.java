@@ -1,6 +1,6 @@
 package cn.fyzzz.panserver.service;
 
-import cn.fyzzz.panserver.model.DO.FileInfo;
+import cn.fyzzz.panserver.model.model.FileInfo;
 import cn.fyzzz.panserver.model.vo.FileInfoVo;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.github.pagehelper.PageInfo;

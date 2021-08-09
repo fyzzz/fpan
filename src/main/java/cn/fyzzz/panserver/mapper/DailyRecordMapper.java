@@ -1,6 +1,6 @@
 package cn.fyzzz.panserver.mapper;
 
-import cn.fyzzz.panserver.model.DO.DailyRecord;
+import cn.fyzzz.panserver.model.model.DailyRecord;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**

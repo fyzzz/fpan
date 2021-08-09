@@ -1,7 +1,7 @@
 package cn.fyzzz.panserver.service.impl;
 
 import cn.fyzzz.panserver.mapper.FileInfoMapper;
-import cn.fyzzz.panserver.model.DO.FileInfo;
+import cn.fyzzz.panserver.model.model.FileInfo;
 import cn.fyzzz.panserver.model.vo.FileInfoVo;
 import cn.fyzzz.panserver.service.FileInfoService;
 import cn.fyzzz.panserver.util.FileUtil;
