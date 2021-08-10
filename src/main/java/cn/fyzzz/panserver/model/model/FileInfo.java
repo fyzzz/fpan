@@ -30,6 +30,8 @@ public class FileInfo implements Serializable {
 
     private Integer storageId;
 
+    private Integer parentId;
+
     /**
     * 文件名
     */
@@ -48,19 +50,22 @@ public class FileInfo implements Serializable {
     /**
     * 属性，文件 or 目录
     */
+    private String attribute;
+
+    /**
+    * 摘要
+    */
     private String digestCode;
 
     /**
-     * 文件id，local就是文件摘要
+     * 文件存储id，local就是文件摘要
      */
-    private String fileId;
+    private String fileStorageId;
 
     /**
      * 类型
      */
     private String type;
-
-    private String  abstractMethod;
 
     /**
      * 是否删除

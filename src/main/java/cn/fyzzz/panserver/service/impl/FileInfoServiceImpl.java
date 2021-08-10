@@ -1,20 +1,26 @@
 package cn.fyzzz.panserver.service.impl;
 
+import cn.fyzzz.panserver.constant.FileAttributeEnum;
+import cn.fyzzz.panserver.constant.GlobalConstant;
+import cn.fyzzz.panserver.exception.ServiceException;
 import cn.fyzzz.panserver.mapper.FileInfoMapper;
 import cn.fyzzz.panserver.model.model.FileInfo;
-import cn.fyzzz.panserver.model.vo.FileInfoVo;
+import cn.fyzzz.panserver.model.model.UserInfo;
 import cn.fyzzz.panserver.service.FileInfoService;
-import cn.fyzzz.panserver.util.FileUtil;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import cn.fyzzz.panserver.service.StorageContext;
+import cn.fyzzz.panserver.service.UserInfoService;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
-import java.util.List;
+import java.io.IOException;
+import java.rmi.ServerException;
 
 /**
  * <p>
@@ -28,36 +34,82 @@ import java.util.List;
 public class FileInfoServiceImpl extends ServiceImpl<FileInfoMapper, FileInfo> implements FileInfoService {
 
     @Autowired
-    private FileInfoMapper fileInfoMapper;
+    private UserInfoService userInfoService;
+
+    @Autowired
+    private StorageContext storageContext;
 
     @Override
-    public List<FileInfo> list(FileInfo fileInfo) {
-        return fileInfoMapper.selectList(getQueryWrapper(fileInfo));
+    public void mkdir(String path) {
+        UserInfo currentUser = userInfoService.currentUser();
+        File file = new File(path);
+        String parentPath = file.getParent();
+        FileInfo saveInfo = new FileInfo();
+        saveInfo.setParentId(getParentId(parentPath, currentUser));
+        saveInfo.setName(file.getName());
+        saveInfo.setPath(path);
+        saveInfo.setUserId(currentUser.getId());
+        saveInfo.setStorageId(currentUser.getStorageId());
+        saveInfo.setAttribute(FileAttributeEnum.FOLDER.getValue());
+        baseMapper.insert(saveInfo);
     }
 
     @Override
-    public PageInfo<FileInfoVo> page(int pageNum, int pageSize , FileInfo fileInfo) {
-        PageHelper.startPage(pageNum,pageSize);
-        return new PageInfo<>(fileInfoMapper.getFileInfoList(fileInfo));
-    }
+    public void move(String srcPath, String targetPath) {
 
-    private QueryWrapper<FileInfo> getQueryWrapper(FileInfo fileInfo){
-        QueryWrapper<FileInfo> wrapper = new QueryWrapper<>();
-        wrapper.eq(fileInfo.getId() != null,"id",fileInfo.getId());
-        wrapper.eq(fileInfo.getUserId() != null,"user_id",fileInfo.getUserId());
-//        wrapper.apply(StringUtils.hasLength(fileInfo.getRemark()),"locate({0},remark)>0",fileInfo.getRemark());
-        wrapper.orderByDesc("id");
-        return wrapper;
     }
 
     @Override
-    public void delete(int id) {
-        //删除文件
-        FileInfo fileInfo = this.getById(id);
-        File file = new File(fileInfo.getPath(),fileInfo.getName());
-        if(file.exists()){
-            FileUtil.deleteFileAndEmptyParent(file);
+    public void delete(String path) {
+
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void upload(String path, MultipartFile uploadFile) throws IOException {
+        UserInfo currentUser = userInfoService.currentUser();
+        String filename = uploadFile.getOriginalFilename();
+        if(!StringUtils.hasLength(filename)){
+            throw new ServerException("文件名为空");
         }
-        fileInfoMapper.deleteById(id);
+        File file = new File(path, filename);
+        String parentPath = file.getParent();
+        FileInfo saveInfo = new FileInfo();
+        saveInfo.setParentId(getParentId(parentPath, currentUser));
+        saveInfo.setName(filename);
+        saveInfo.setPath(path);
+        saveInfo.setUserId(currentUser.getId());
+        saveInfo.setStorageId(currentUser.getStorageId());
+        saveInfo.setAttribute(FileAttributeEnum.FILE.getValue());
+        if(filename.contains(GlobalConstant.SPOT)){
+            saveInfo.setType(filename.substring(filename.indexOf('.') + 1).toLowerCase());
+        }
+        baseMapper.insert(saveInfo);
+        storageContext.getStorageServiceById(currentUser.getStorageId()).upload(path, uploadFile, saveInfo.getId());
     }
+
+    private LambdaQueryWrapper<FileInfo> lambdaQueryWrapper(){
+        return lambdaQueryWrapper(userInfoService.currentUser());
+    }
+
+    private LambdaQueryWrapper<FileInfo> lambdaQueryWrapper(UserInfo userInfo){
+        LambdaQueryWrapper<FileInfo> lambdaQuery = Wrappers.lambdaQuery();
+        lambdaQuery.eq(FileInfo::getUserId, userInfo.getId());
+        lambdaQuery.eq(FileInfo::getStorageId, userInfo.getId());
+        return lambdaQuery;
+    }
+
+    private Integer getParentId(String parentPath, UserInfo currentUser){
+        LambdaQueryWrapper<FileInfo> lambdaQueryWrapper = lambdaQueryWrapper(currentUser);
+        if(StringUtils.hasLength(parentPath)){
+            lambdaQueryWrapper.eq(FileInfo::getPath, parentPath);
+            FileInfo parent = baseMapper.selectOne(lambdaQueryWrapper);
+            if(parent == null){
+                throw new ServiceException("父目录不存在");
+            }
+            return parent.getParentId();
+        }
+        return null;
+    }
+
 }

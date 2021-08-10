@@ -3,12 +3,14 @@ package cn.fyzzz.panserver.service.impl;
 import cn.fyzzz.panserver.config.PanConfig;
 import cn.fyzzz.panserver.constant.FileAttributeEnum;
 import cn.fyzzz.panserver.exception.ServiceException;
+import cn.fyzzz.panserver.model.model.FileInfo;
 import cn.fyzzz.panserver.model.vo.FileVo;
 import cn.fyzzz.panserver.service.StorageService;
 import cn.hutool.core.io.FileUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.DigestUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -93,16 +95,15 @@ public class LocalStorageServiceImpl implements StorageService {
     }
 
     @Override
-    public void upload(String path, MultipartFile uploadFile) throws IOException {
-        File dir = new File(panConfig.getLocalStorage().getRootPath(), path);
-        if (!dir.exists() || !dir.isDirectory()) {
-            throw new ServiceException("目录不存在");
-        }
-        String uploadFileName = uploadFile.getOriginalFilename();
-        if(!StringUtils.hasLength(uploadFileName)){
-            throw new ServiceException("上传文件名为空");
-        }
-        uploadFile.transferTo(new File(dir.getAbsolutePath(), uploadFileName));
+    public void upload(String path, MultipartFile uploadFile, Integer fileId) throws IOException {
+
+        String md5Digest = DigestUtils.md5DigestAsHex(uploadFile.getInputStream());
+        log.info("文件getName{}", uploadFile.getName());
+        log.info("文件getOriName{}", uploadFile.getOriginalFilename());
+        log.info("文件md5{}", md5Digest);
+        String absolutePath = new File(panConfig.getLocalStorage().getRootPath()).getAbsolutePath();
+        uploadFile.transferTo(new File(absolutePath, md5Digest));
+
     }
 
     @Override

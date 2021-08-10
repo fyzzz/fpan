@@ -54,7 +54,7 @@ public class StorageController {
     @PostMapping("/upload")
     public SysResult upload(String path, MultipartFile uploadFile){
         try {
-            storageService.upload(path, uploadFile);
+            storageService.upload(path, uploadFile, null);
         } catch (IOException e) {
             log.error("上传文件失败", e);
             return SysResult.error("上传文件失败");

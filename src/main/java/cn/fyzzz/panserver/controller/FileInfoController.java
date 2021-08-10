@@ -42,17 +42,6 @@ public class FileInfoController {
     @Value("${upload.root.path}")
     private String uploadRootPath;
 
-    @PostMapping("/page")
-    public SysResult page(
-            @RequestParam(defaultValue = "1") int pageNum,
-            @RequestParam(defaultValue = "20") int pageSize,
-            @RequestBody FileInfo fileInfo
-    ){
-        // 暂时只查自己的
-        fileInfo.setUserId(userInfoService.currentUserId());
-        return SysResult.ok(fileInfoService.page(pageNum,pageSize,fileInfo));
-    }
-
     @PostMapping("/save")
     public SysResult save(@RequestBody FileInfo fileInfo){
         fileInfo.setUserId(userInfoService.currentUserId());
@@ -88,12 +77,6 @@ public class FileInfoController {
         fileInfo.setPath(uploadDir.getAbsolutePath());
         fileInfoService.save(fileInfo);
         return SysResult.ok(fileInfo.getId());
-    }
-
-    @PostMapping("/delete/{id}")
-    public SysResult delete(@PathVariable("id") int id){
-        fileInfoService.delete(id);
-        return SysResult.ok();
     }
 
     @GetMapping("/download/{id}")

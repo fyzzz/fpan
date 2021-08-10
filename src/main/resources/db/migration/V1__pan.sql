@@ -1,4 +1,4 @@
-DROP TABLE IF EXISTS file_info_bak;
+DROP TABLE IF EXISTS file_info;
 CREATE TABLE `file_info` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `file_name` varchar(50) DEFAULT NULL COMMENT '文件名',
@@ -9,7 +9,7 @@ CREATE TABLE `file_info` (
   `create_time` datetime DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=41 DEFAULT CHARSET=utf8mb4 COMMENT='文件信息';
-alter table file_info_bak
+alter table file_info
 	add user_id int null comment '归属人id' after id;
 
 
@@ -34,7 +34,7 @@ CREATE TABLE `user_info` (
 --
 
 LOCK TABLES `user_info` WRITE;
-INSERT INTO `user_info` (`id`, `user_name`, `user_password`, `is_delete`, `last_login_time`, `create_time`, `update_time`) VALUES (1,'fyzzz','$2a$10$Qo//yxxqnSsqBBUupz6fMOkjY4o3RsiOC3NLNvYE92f4IsBYFX7/q',0,'2019-05-17 20:00:49','2019-05-17 20:00:49','2019-05-17 20:00:49');
+INSERT INTO `user_info` (`id`, `user_name`, `user_password`, `is_delete`, `last_login_time`, `create_time`, `update_time`) VALUES (1,'fyzzz','$2a$10$F1yve9qAK3Cc/jKA3lW6KOGWjBfzgxPOYIO2R6LT7Oksd/eTDKM.q',0,'2019-05-17 20:00:49','2019-05-17 20:00:49','2019-05-17 20:00:49');
 UNLOCK TABLES;
 
 

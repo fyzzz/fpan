@@ -15,7 +15,7 @@
         select f.id,user_id,file_name,file_path,file_size,
         file_upload_name,remark,f.is_delete,f.create_time,
         u.id as u_id,u.user_name
-        from file_info_bak f left join user_info u on f.user_id = u.id
+        from file_info f left join user_info u on f.user_id = u.id
         <where>
             f.is_delete = 0
             <if test="id != null">
