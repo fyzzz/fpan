@@ -45,10 +45,10 @@ public interface StorageService {
      * 上传文件
      * @param path 存储路径
      * @param uploadFile 上传的文件
-     * @param fileId 数据库fileInfo表主键，回填size等信息用
      * @throws IOException io异常
+     * @return 文件存储id
      */
-    void upload(String path, MultipartFile uploadFile, Integer fileId) throws IOException;
+    String upload(String path, MultipartFile uploadFile) throws IOException;
 
     /**
      * 下载

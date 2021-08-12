@@ -15,12 +15,14 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.DigestUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
 import java.rmi.ServerException;
+import java.util.List;
 
 /**
  * <p>
@@ -84,8 +86,15 @@ public class FileInfoServiceImpl extends ServiceImpl<FileInfoMapper, FileInfo> i
         if(filename.contains(GlobalConstant.SPOT)){
             saveInfo.setType(filename.substring(filename.indexOf('.') + 1).toLowerCase());
         }
+        String digest = DigestUtils.md5DigestAsHex(uploadFile.getInputStream());
+        String fileStorageId = getFileStorageId(digest, currentUser.getStorageId());
+        if (fileStorageId == null){
+            // 没有相同的摘要，再进行存储
+            storageContext.getStorageServiceById(currentUser.getStorageId()).upload(path, uploadFile);
+        }
+        saveInfo.setDigestCode(digest);
+        saveInfo.setFileStorageId(fileStorageId);
         baseMapper.insert(saveInfo);
-        storageContext.getStorageServiceById(currentUser.getStorageId()).upload(path, uploadFile, saveInfo.getId());
     }
 
     private LambdaQueryWrapper<FileInfo> lambdaQueryWrapper(){
@@ -110,6 +119,17 @@ public class FileInfoServiceImpl extends ServiceImpl<FileInfoMapper, FileInfo> i
             return parent.getParentId();
         }
         return null;
+    }
+
+    private String getFileStorageId(String digest, Integer storageId){
+        LambdaQueryWrapper<FileInfo> lambdaQuery = Wrappers.lambdaQuery();
+        lambdaQuery.eq(FileInfo::getStorageId, storageId);
+        lambdaQuery.eq(FileInfo::getDigestCode, digest);
+        List<FileInfo> list = this.list(lambdaQuery);
+        if (list.isEmpty()) {
+            return null;
+        }
+        return list.get(0).getFileStorageId();
     }
 
 }

@@ -95,15 +95,14 @@ public class LocalStorageServiceImpl implements StorageService {
     }
 
     @Override
-    public void upload(String path, MultipartFile uploadFile, Integer fileId) throws IOException {
-
+    public String upload(String path, MultipartFile uploadFile) throws IOException {
         String md5Digest = DigestUtils.md5DigestAsHex(uploadFile.getInputStream());
         log.info("文件getName{}", uploadFile.getName());
         log.info("文件getOriName{}", uploadFile.getOriginalFilename());
         log.info("文件md5{}", md5Digest);
         String absolutePath = new File(panConfig.getLocalStorage().getRootPath()).getAbsolutePath();
         uploadFile.transferTo(new File(absolutePath, md5Digest));
-
+        return md5Digest;
     }
 
     @Override
