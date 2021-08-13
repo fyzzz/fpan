@@ -7,6 +7,7 @@ import cn.fyzzz.panserver.service.UserInfoService;
 import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -23,12 +24,13 @@ import org.springframework.stereotype.Service;
  * 2019-08-15
  */
 @Service("userInfoService")
-@AllArgsConstructor
 public class UserInfoServiceImpl implements UserInfoService, UserDetailsService {
 
-    private final UserInfoMapper userInfoMapper;
+    @Autowired
+    private UserInfoMapper userInfoMapper;
 
-    private final PasswordEncoder passwordEncoder;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

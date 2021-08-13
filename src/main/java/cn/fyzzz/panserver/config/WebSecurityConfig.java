@@ -34,16 +34,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Value("${spring.profiles.active}")
     private String profile;
 
-    @Value("${server.port}")
-    private Integer httpsPort;
-
     private static final String DEV = "dev";
-
-
-    @Bean
-    PasswordEncoder passwordEncoder(){
-        return new BCryptPasswordEncoder();
-    }
 
     /**
      * 验证所有请求
