@@ -16,10 +16,10 @@ public class PanConfig {
 
     private LocalStorageConfig localStorage;
 
-    private DatabaseConfig database;
+    private DatasourceConfig datasource;
 
     @Data
-    public static class DatabaseConfig {
+    public static class DatasourceConfig {
 
         private String host;
 

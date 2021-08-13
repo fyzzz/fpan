@@ -18,9 +18,9 @@ spring:
       filters: stat
       driver-class-name: com.mysql.jdbc.Driver
       #基本属性
-      url: jdbc:mysql://${pan.database.host}:${pan.database.port}/${pan.database.name}?useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true&useSSL=false
-      username: ${pan.database.username}
-      password: ${pan.database.password}
+      url: jdbc:mysql://${pan.datasource.host}:${pan.datasource.port}/${pan.datasource.name}?useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true&useSSL=false
+      username: ${pan.datasource.username}
+      password: ${pan.datasource.password}
       #配置初始化大小/最小/最大
       initial-size: 1
       min-idle: 1
