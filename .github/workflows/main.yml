@@ -25,7 +25,7 @@ jobs:
         uses: actions/setup-java@v2
         with:
           java-version: 1.8
-
+          distribution: 'adopt'
 #      # 给 gradle 赋予可运行权限
 #      - name: Grant execute permission for mvn
 #        run: chmod +x mvn
@@ -33,15 +33,15 @@ jobs:
       # 通过 gradle 打包我们的项目
       - name: Build with maven
         run: mvn clean package -Dmaven.test.skip=true
-
-      # 通过 Dockerfile 构建镜像
-      - name: Build docker image
-        run: docker build . -t {{ image_name:image_version }}
-
-      # 登陆到我们自己的 docker registry
-      - name: Login to huaweiyun docker image registry
-        run: docker login -u ${{ secrets.DOCKER_USER }} -p ${{ secrets.DOCKER_SECRET }} ${{ secrets.DOCKER_REPOSITORY }}
-
-      # 上传 docker 镜像
-      - name: Push image to huaweiyun docker image registry
-        run: docker push {{ image_name:image_version }}
+#
+#      # 通过 Dockerfile 构建镜像
+#      - name: Build docker image
+#        run: docker build . -t {{ image_name:image_version }}
+#
+#      # 登陆到我们自己的 docker registry
+#      - name: Login to huaweiyun docker image registry
+#        run: docker login -u ${{ secrets.DOCKER_USER }} -p ${{ secrets.DOCKER_SECRET }} ${{ secrets.DOCKER_REPOSITORY }}
+#
+#      # 上传 docker 镜像
+#      - name: Push image to huaweiyun docker image registry
+#        run: docker push {{ image_name:image_version }}
