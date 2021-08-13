@@ -1,6 +1,6 @@
 package cn.fyzzz.panserver.service.impl;
 
-import cn.fyzzz.panserver.model.DO.DailyRecord;
+import cn.fyzzz.panserver.model.model.DailyRecord;
 import cn.fyzzz.panserver.mapper.DailyRecordMapper;
 import cn.fyzzz.panserver.service.DailyRecordService;
 import cn.fyzzz.panserver.service.UserInfoService;

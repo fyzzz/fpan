@@ -1,4 +1,4 @@
-package cn.fyzzz.panserver.model.DO;
+package cn.fyzzz.panserver.model.model;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
@@ -45,6 +45,11 @@ public class UserInfo implements Serializable, UserDetails {
     * 用户密码
     */
     private String userPassword;
+
+    /**
+     * 存储id
+     */
+    private Integer storageId;
 
     /**
     * 是否删除;0-未删除;1-已删除

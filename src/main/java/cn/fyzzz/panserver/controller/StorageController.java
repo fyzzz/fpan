@@ -4,8 +4,13 @@ import cn.fyzzz.panserver.model.SysResult;
 import cn.fyzzz.panserver.model.req.StorageReq;
 import cn.fyzzz.panserver.service.StorageService;
 import io.swagger.annotations.Api;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 /**
  * 文件存储接口
@@ -14,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
  * 2021/8/6 10:29 上午
  */
 @Api(tags = "文件存储接口")
+@Slf4j
 @RestController
 @RequestMapping("/storage")
 public class StorageController {
@@ -43,6 +49,22 @@ public class StorageController {
     public SysResult delete(@RequestBody StorageReq storageReq){
         storageService.delete(storageReq.getPath());
         return SysResult.ok();
+    }
+
+    @PostMapping("/upload")
+    public SysResult upload(String path, MultipartFile uploadFile){
+        try {
+            storageService.upload(path, uploadFile);
+        } catch (IOException e) {
+            log.error("上传文件失败", e);
+            return SysResult.error("上传文件失败");
+        }
+        return SysResult.ok();
+    }
+
+    @GetMapping("/download")
+    public void download(String path, HttpServletResponse response){
+        storageService.download(path, response);
     }
 
 }

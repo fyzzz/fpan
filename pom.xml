@@ -121,6 +121,13 @@
             <artifactId>flyway-core</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>org.freemarker</groupId>
+            <artifactId>freemarker</artifactId>
+            <version>2.3.30</version>
+            <optional>true</optional>
+        </dependency>
+
     </dependencies>
 
 

@@ -16,4 +16,8 @@ public class GlobalConstant {
 
     public static final int EXPEND = 1;
 
+    public static final String SEPARATOR = "/";
+
+    public static final String SPOT = ".";
+
 }

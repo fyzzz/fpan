@@ -2,7 +2,7 @@ package cn.fyzzz.panserver.controller;
 
 
 import cn.fyzzz.panserver.exception.ServiceException;
-import cn.fyzzz.panserver.model.DO.FileInfo;
+import cn.fyzzz.panserver.model.model.FileInfo;
 import cn.fyzzz.panserver.model.SysResult;
 import cn.fyzzz.panserver.service.FileInfoService;
 import cn.fyzzz.panserver.service.UserInfoService;
@@ -42,17 +42,6 @@ public class FileInfoController {
     @Value("${upload.root.path}")
     private String uploadRootPath;
 
-    @PostMapping("/page")
-    public SysResult page(
-            @RequestParam(defaultValue = "1") int pageNum,
-            @RequestParam(defaultValue = "20") int pageSize,
-            @RequestBody FileInfo fileInfo
-    ){
-        // 暂时只查自己的
-        fileInfo.setUserId(userInfoService.currentUserId());
-        return SysResult.ok(fileInfoService.page(pageNum,pageSize,fileInfo));
-    }
-
     @PostMapping("/save")
     public SysResult save(@RequestBody FileInfo fileInfo){
         fileInfo.setUserId(userInfoService.currentUserId());
@@ -83,17 +72,11 @@ public class FileInfoController {
             log.error("文件上传失败！",e);
         }
         FileInfo fileInfo = new FileInfo();
-        fileInfo.setFileUploadName(uploadFileName);
-        fileInfo.setFileName(fileName);
-        fileInfo.setFilePath(uploadDir.getAbsolutePath());
+//        fileInfo.setFileUploadName(uploadFileName);
+        fileInfo.setName(fileName);
+        fileInfo.setPath(uploadDir.getAbsolutePath());
         fileInfoService.save(fileInfo);
         return SysResult.ok(fileInfo.getId());
-    }
-
-    @PostMapping("/delete/{id}")
-    public SysResult delete(@PathVariable("id") int id){
-        fileInfoService.delete(id);
-        return SysResult.ok();
     }
 
     @GetMapping("/download/{id}")
@@ -102,13 +85,13 @@ public class FileInfoController {
         if(fileInfo == null){
             return;
         }
-        File file = new File(fileInfo.getFilePath(),fileInfo.getFileName());
+        File file = new File(fileInfo.getPath(),fileInfo.getName());
         if(file.exists() && file.isFile()){
             response.reset();
             response.setContentType("application/force-download");
             // 设置文件名
             try {
-                response.addHeader("Content-Disposition", "attachment;fileName=" + URLEncoder.encode(fileInfo.getFileUploadName(),"UTF-8"));
+                response.addHeader("Content-Disposition", "attachment;fileName=" + URLEncoder.encode(fileInfo.getName(),"UTF-8"));
             } catch (UnsupportedEncodingException e) {
                 log.error("文件下载失败",e);
             }

@@ -1,4 +1,4 @@
-package cn.fyzzz.panserver.model.DO;
+package cn.fyzzz.panserver.model.model;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
@@ -28,30 +28,44 @@ public class FileInfo implements Serializable {
 
     private Integer userId;
 
+    private Integer storageId;
+
+    private Integer parentId;
+
     /**
     * 文件名
     */
-    private String fileName;
+    private String name;
 
     /**
     * 文件路径
     */
-    private String filePath;
-
-    /**
-    * 文件上传名
-    */
-    private String fileUploadName;
+    private String path;
 
     /**
     * 文件大小，字节
     */
-    private Integer fileSize;
+    private Integer size;
 
     /**
-    * 备注
+    * 属性，文件 or 目录
     */
-    private String remark;
+    private String attribute;
+
+    /**
+    * 摘要
+    */
+    private String digestCode;
+
+    /**
+     * 文件存储id，local就是文件摘要
+     */
+    private String fileStorageId;
+
+    /**
+     * 类型
+     */
+    private String type;
 
     /**
      * 是否删除

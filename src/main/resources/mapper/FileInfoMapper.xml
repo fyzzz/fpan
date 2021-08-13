@@ -5,13 +5,13 @@
     <resultMap id="fileInfoVoMap" type="cn.fyzzz.panserver.model.vo.FileInfoVo" autoMapping="true">
         <id column="id" property="id"/>
         <result column="is_delete" property="deleted"/>
-        <association property="owner" javaType="cn.fyzzz.panserver.model.DO.UserInfo" autoMapping="true">
+        <association property="owner" javaType="cn.fyzzz.panserver.model.model.UserInfo" autoMapping="true">
             <id column="u_id" property="id"/>
         </association>
     </resultMap>
 
     <select id="getFileInfoList" resultMap="fileInfoVoMap"
-            parameterType="cn.fyzzz.panserver.model.DO.FileInfo">
+            parameterType="cn.fyzzz.panserver.model.model.FileInfo">
         select f.id,user_id,file_name,file_path,file_size,
         file_upload_name,remark,f.is_delete,f.create_time,
         u.id as u_id,u.user_name

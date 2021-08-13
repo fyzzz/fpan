@@ -1,7 +1,10 @@
 package cn.fyzzz.panserver.service;
 
 import cn.fyzzz.panserver.model.vo.FileVo;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -37,5 +40,21 @@ public interface StorageService {
      * @param path 路径
      */
     void delete(String path);
+
+    /**
+     * 上传文件
+     * @param path 存储路径
+     * @param uploadFile 上传的文件
+     * @throws IOException io异常
+     * @return 文件存储id
+     */
+    String upload(String path, MultipartFile uploadFile) throws IOException;
+
+    /**
+     * 下载
+     * @param path 下载路径
+     * @param response 请求返回
+     */
+    void download(String path, HttpServletResponse response);
 
 }
