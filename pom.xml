@@ -10,7 +10,7 @@
     </parent>
     <groupId>cn.fyzzz</groupId>
     <artifactId>pan-server</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
     <name>pan-server</name>
     <description>网盘后端</description>
 
