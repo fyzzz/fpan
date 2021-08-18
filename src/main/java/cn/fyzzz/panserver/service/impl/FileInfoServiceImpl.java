@@ -44,6 +44,11 @@ public class FileInfoServiceImpl extends ServiceImpl<FileInfoMapper, FileInfo> i
     @Override
     public void mkdir(String path) {
         UserInfo currentUser = userInfoService.currentUser();
+        LambdaQueryWrapper<FileInfo> lambdaWrapper = lambdaQueryWrapper(currentUser);
+        lambdaWrapper.eq(FileInfo::getPath, path);
+        if(this.count(lambdaWrapper) > 0){
+            throw new ServiceException("文件夹已存在");
+        }
         File file = new File(path);
         String parentPath = file.getParent();
         FileInfo saveInfo = new FileInfo();
@@ -58,22 +63,40 @@ public class FileInfoServiceImpl extends ServiceImpl<FileInfoMapper, FileInfo> i
 
     @Override
     public void move(String srcPath, String targetPath) {
-
+        if (!StringUtils.hasLength(srcPath) || !StringUtils.hasLength(targetPath)) {
+            throw new ServiceException("path不能为空");
+        }
+        // 1、查出当前文件（目录）和所有子文件
+        LambdaQueryWrapper<FileInfo> lambdaQuery = lambdaQueryWrapper();
+        lambdaQuery.likeRight(FileInfo::getPath, srcPath);
+        List<FileInfo> fileInfos = this.list(lambdaQuery);
+        // 2、修改path
+        for (FileInfo fileInfo : fileInfos) {
+            fileInfo.setPath(fileInfo.getPath().replaceFirst(srcPath, targetPath));
+        }
+        // 3、批量修改
+        this.updateBatchById(fileInfos);
     }
 
     @Override
     public void delete(String path) {
-
+        if (!StringUtils.hasLength(path)) {
+            throw new ServiceException("path不能为空");
+        }
+        LambdaQueryWrapper<FileInfo> lambdaQuery = lambdaQueryWrapper();
+        lambdaQuery.likeRight(FileInfo::getPath, path);
+        this.remove(lambdaQuery);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void upload(String path, MultipartFile uploadFile) throws IOException {
+    public Integer upload(String path, MultipartFile uploadFile) throws IOException {
         UserInfo currentUser = userInfoService.currentUser();
         String filename = uploadFile.getOriginalFilename();
         if(!StringUtils.hasLength(filename)){
             throw new ServerException("文件名为空");
         }
+        // todo 校验文件名称
         File file = new File(path, filename);
         String parentPath = file.getParent();
         FileInfo saveInfo = new FileInfo();
@@ -95,6 +118,7 @@ public class FileInfoServiceImpl extends ServiceImpl<FileInfoMapper, FileInfo> i
         saveInfo.setDigestCode(digest);
         saveInfo.setFileStorageId(fileStorageId);
         baseMapper.insert(saveInfo);
+        return saveInfo.getId();
     }
 
     private LambdaQueryWrapper<FileInfo> lambdaQueryWrapper(){

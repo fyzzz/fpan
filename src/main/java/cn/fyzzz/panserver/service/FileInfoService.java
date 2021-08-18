@@ -37,7 +37,8 @@ public interface FileInfoService extends IService<FileInfo> {
      * @param path 存储路径
      * @param uploadFile 上传的文件
      * @throws IOException io异常
+     * @return 入库的id
      */
-    void upload(String path, MultipartFile uploadFile) throws IOException;
+    Integer upload(String path, MultipartFile uploadFile) throws IOException;
 
 }

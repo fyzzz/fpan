@@ -34,8 +34,8 @@ create table file_info
     digest_code varchar(255) null comment '摘要',
     size int null comment '文件大小',
     file_storage_id varchar(255) null comment '文件存储id。local就是文件摘要',
-    is_delete tinyint null comment '是否删除',
-    create_time datetime null,
+    is_delete tinyint not null default 0 comment '是否删除',
+    create_time datetime not null default current_timestamp,
     update_time datetime null,
     constraint file_info_pk
         primary key (id)
