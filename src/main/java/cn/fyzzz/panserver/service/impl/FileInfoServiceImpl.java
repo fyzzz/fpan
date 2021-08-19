@@ -42,6 +42,13 @@ public class FileInfoServiceImpl extends ServiceImpl<FileInfoMapper, FileInfo> i
     private StorageContext storageContext;
 
     @Override
+    public List<FileInfo> list(String path) {
+        LambdaQueryWrapper<FileInfo> lambdaWrapper = lambdaQueryWrapper();
+        lambdaWrapper.eq(StringUtils.hasLength(path), FileInfo::getPath, path);
+        return baseMapper.selectList(lambdaWrapper);
+    }
+
+    @Override
     public void mkdir(String path) {
         UserInfo currentUser = userInfoService.currentUser();
         LambdaQueryWrapper<FileInfo> lambdaWrapper = lambdaQueryWrapper(currentUser);

@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 
 /**
  * 文件信息 服务类
@@ -12,6 +13,13 @@ import java.io.IOException;
  * 2019-09-11
  */
 public interface FileInfoService extends IService<FileInfo> {
+
+    /**
+     * 查询列表
+     * @param path 路径
+     * @return 文件列表
+     */
+    List<FileInfo> list(String path);
 
     /**
      * 新建目录

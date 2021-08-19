@@ -29,6 +29,11 @@ public class FileInfoController {
     @Autowired
     private FileInfoService fileInfoService;
 
+    @GetMapping("/list")
+    public SysResult list(@RequestParam(required = false, defaultValue = "/") String path){
+        return SysResult.ok(fileInfoService.list(path));
+    }
+
     @PostMapping("/upload")
     public SysResult upload(MultipartFile uploadFile, String path) throws IOException {
         return SysResult.ok(fileInfoService.upload(path, uploadFile));
