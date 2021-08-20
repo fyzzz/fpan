@@ -1,2 +1,2 @@
-# pan-server
+# fpan
 网盘后端
