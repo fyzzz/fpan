@@ -9,9 +9,9 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>cn.fyzzz</groupId>
-    <artifactId>pan-server</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
-    <name>pan-server</name>
+    <artifactId>fpan</artifactId>
+    <version>1.0.3</version>
+    <name>fpan</name>
     <description>网盘后端</description>
 
     <properties>
