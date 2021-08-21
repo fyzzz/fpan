@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @Api(tags = "用户接口")
 @RestController
-@RequestMapping("/user-info")
+@RequestMapping("/api/user-info")
 @AllArgsConstructor
 public class UserInfoController {
 

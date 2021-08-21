@@ -46,7 +46,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .formLogin()
                 //自定义登录的url method=post
-                .loginProcessingUrl("/login")
+                .loginProcessingUrl("/api/login")
                 //登录接口参数配置
                 .usernameParameter("username")
                 .passwordParameter("password")
@@ -74,7 +74,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .permitAll()
                 .and()
                 .logout()
-                .logoutUrl("/logout")
+                .logoutUrl("/api/logout")
                 //是否清除认证信息
                 .clearAuthentication(true)
                 //是否使session失效

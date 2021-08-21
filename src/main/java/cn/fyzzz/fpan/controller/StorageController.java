@@ -21,7 +21,7 @@ import java.io.IOException;
 @Api(tags = "文件存储接口")
 @Slf4j
 @RestController
-@RequestMapping("/storage")
+@RequestMapping("/api/storage")
 public class StorageController {
 
     @Autowired
