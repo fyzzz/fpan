@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
  * 2021/8/13 5:57 下午
  */
 @RestController
-@RequestMapping("/api/health")
+@RequestMapping("/health")
 public class HealthController {
 
     @GetMapping("/ping")

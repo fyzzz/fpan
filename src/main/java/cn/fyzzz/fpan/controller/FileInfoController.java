@@ -23,7 +23,7 @@ import java.io.*;
 @Api(tags = "文件接口")
 @Slf4j
 @RestController
-@RequestMapping("/api/fileInfo")
+@RequestMapping("/fileInfo")
 public class FileInfoController {
 
     @Autowired

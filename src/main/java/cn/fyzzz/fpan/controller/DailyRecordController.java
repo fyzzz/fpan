@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
  */
 @Api(tags = "日志接口")
 @RestController
-@RequestMapping("/api/daily-record")
+@RequestMapping("/daily-record")
 @AllArgsConstructor
 public class DailyRecordController {
 

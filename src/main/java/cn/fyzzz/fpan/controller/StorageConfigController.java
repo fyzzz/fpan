@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @since 2021-08-09
  */
 @RestController
-@RequestMapping("/api/storage-config")
+@RequestMapping("/storage-config")
 public class StorageConfigController {
 
 }
