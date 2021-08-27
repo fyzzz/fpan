@@ -43,9 +43,11 @@ public class FileInfoServiceImpl extends ServiceImpl<FileInfoMapper, FileInfo> i
 
     @Override
     public List<FileInfo> list(String path) {
-        LambdaQueryWrapper<FileInfo> lambdaWrapper = lambdaQueryWrapper();
-        lambdaWrapper.eq(StringUtils.hasLength(path), FileInfo::getPath, path);
-        return baseMapper.selectList(lambdaWrapper);
+        UserInfo userInfo = userInfoService.currentUser();
+        Integer parentId = getIdByPath(path, userInfo);
+        LambdaQueryWrapper<FileInfo> lambdaQueryWrapper = lambdaQueryWrapper();
+        lambdaQueryWrapper.eq(FileInfo::getParentId, parentId);
+        return baseMapper.selectList(lambdaQueryWrapper);
     }
 
     @Override
@@ -59,7 +61,7 @@ public class FileInfoServiceImpl extends ServiceImpl<FileInfoMapper, FileInfo> i
         File file = new File(path);
         String parentPath = file.getParent();
         FileInfo saveInfo = new FileInfo();
-        saveInfo.setParentId(getParentId(parentPath, currentUser));
+        saveInfo.setParentId(getIdByPath(parentPath, currentUser));
         saveInfo.setName(file.getName());
         saveInfo.setPath(path);
         saveInfo.setUserId(currentUser.getId());
@@ -107,7 +109,7 @@ public class FileInfoServiceImpl extends ServiceImpl<FileInfoMapper, FileInfo> i
         File file = new File(path, filename);
         String parentPath = file.getParent();
         FileInfo saveInfo = new FileInfo();
-        saveInfo.setParentId(getParentId(parentPath, currentUser));
+        saveInfo.setParentId(getIdByPath(parentPath, currentUser));
         saveInfo.setName(filename);
         saveInfo.setPath(path);
         saveInfo.setUserId(currentUser.getId());
@@ -139,17 +141,17 @@ public class FileInfoServiceImpl extends ServiceImpl<FileInfoMapper, FileInfo> i
         return lambdaQuery;
     }
 
-    private Integer getParentId(String parentPath, UserInfo currentUser){
+    private Integer getIdByPath(String path, UserInfo currentUser){
         LambdaQueryWrapper<FileInfo> lambdaQueryWrapper = lambdaQueryWrapper(currentUser);
-        if(StringUtils.hasLength(parentPath)){
-            lambdaQueryWrapper.eq(FileInfo::getPath, parentPath);
-            FileInfo parent = baseMapper.selectOne(lambdaQueryWrapper);
-            if(parent == null){
-                throw new ServiceException("父目录不存在");
+        if(StringUtils.hasLength(path)){
+            lambdaQueryWrapper.eq(FileInfo::getPath, path);
+            FileInfo fileInfo = baseMapper.selectOne(lambdaQueryWrapper);
+            if(fileInfo == null){
+                throw new ServiceException("目录不存在");
             }
-            return parent.getParentId();
+            return fileInfo.getId();
         }
-        return null;
+        throw new ServiceException("目录不能为空");
     }
 
     private String getFileStorageId(String digest, Integer storageId){

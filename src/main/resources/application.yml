@@ -70,7 +70,7 @@ mybatis-plus:
     cache-enabled: false
 logging:
   level:
-    cn.fyzzz.panserver: debug
+    cn.fyzzz.fpan: debug
   file:
     path: log
 #  path: log
