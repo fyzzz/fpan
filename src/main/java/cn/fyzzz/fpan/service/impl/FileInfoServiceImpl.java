@@ -23,6 +23,7 @@ import java.io.File;
 import java.io.IOException;
 import java.rmi.ServerException;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * <p>
@@ -43,27 +44,33 @@ public class FileInfoServiceImpl extends ServiceImpl<FileInfoMapper, FileInfo> i
 
     @Override
     public List<FileInfo> list(String path) {
-        UserInfo userInfo = userInfoService.currentUser();
-        Integer parentId = getIdByPath(path, userInfo);
         LambdaQueryWrapper<FileInfo> lambdaQueryWrapper = lambdaQueryWrapper();
-        lambdaQueryWrapper.eq(FileInfo::getParentId, parentId);
+        lambdaQueryWrapper.eq(FileInfo::getPath, path);
+        lambdaQueryWrapper.orderByAsc(false ,FileInfo::getName);
         return baseMapper.selectList(lambdaQueryWrapper);
+    }
+
+    @Override
+    public boolean updateById(FileInfo entity) {
+        return false;
     }
 
     @Override
     public void mkdir(String path) {
         UserInfo currentUser = userInfoService.currentUser();
-        LambdaQueryWrapper<FileInfo> lambdaWrapper = lambdaQueryWrapper(currentUser);
-        lambdaWrapper.eq(FileInfo::getPath, path);
-        if(this.count(lambdaWrapper) > 0){
-            throw new ServiceException("文件夹已存在");
-        }
         File file = new File(path);
+        StringBuilder filename = new StringBuilder(file.getName());
         String parentPath = file.getParent();
+        // 校验文件名称
+        FileInfo fileExist = selectByPathName(parentPath, filename.toString(), currentUser);
+        while (fileExist != null) {
+            filename.append(GlobalConstant.FILE_REPEAT_SUFFIX);
+            fileExist = selectByPathName(parentPath, filename.toString(), currentUser);
+        }
         FileInfo saveInfo = new FileInfo();
-        saveInfo.setParentId(getIdByPath(parentPath, currentUser));
-        saveInfo.setName(file.getName());
-        saveInfo.setPath(path);
+        saveInfo.setParentId(findParent(parentPath, currentUser));
+        saveInfo.setName(filename.toString());
+        saveInfo.setPath(parentPath);
         saveInfo.setUserId(currentUser.getId());
         saveInfo.setStorageId(currentUser.getStorageId());
         saveInfo.setAttribute(FileAttributeEnum.FOLDER.getValue());
@@ -101,15 +108,21 @@ public class FileInfoServiceImpl extends ServiceImpl<FileInfoMapper, FileInfo> i
     @Transactional(rollbackFor = Exception.class)
     public Integer upload(String path, MultipartFile uploadFile) throws IOException {
         UserInfo currentUser = userInfoService.currentUser();
-        String filename = uploadFile.getOriginalFilename();
-        if(!StringUtils.hasLength(filename)){
+        StringBuilder nameBuilder = new StringBuilder(Objects.requireNonNull(uploadFile.getOriginalFilename()));
+        if(!StringUtils.hasLength(nameBuilder)){
             throw new ServerException("文件名为空");
         }
-        // todo 校验文件名称
+        // 校验文件名称
+        FileInfo fileExist = selectByPathName(path, nameBuilder.toString(), currentUser);
+        while (fileExist != null) {
+            nameBuilder.append(GlobalConstant.FILE_REPEAT_SUFFIX);
+            fileExist = selectByPathName(path, nameBuilder.toString(), currentUser);
+        }
+        String filename = nameBuilder.toString();
         File file = new File(path, filename);
         String parentPath = file.getParent();
         FileInfo saveInfo = new FileInfo();
-        saveInfo.setParentId(getIdByPath(parentPath, currentUser));
+        saveInfo.setParentId(findParent(parentPath, currentUser));
         saveInfo.setName(filename);
         saveInfo.setPath(path);
         saveInfo.setUserId(currentUser.getId());
@@ -141,17 +154,23 @@ public class FileInfoServiceImpl extends ServiceImpl<FileInfoMapper, FileInfo> i
         return lambdaQuery;
     }
 
-    private Integer getIdByPath(String path, UserInfo currentUser){
-        LambdaQueryWrapper<FileInfo> lambdaQueryWrapper = lambdaQueryWrapper(currentUser);
-        if(StringUtils.hasLength(path)){
-            lambdaQueryWrapper.eq(FileInfo::getPath, path);
-            FileInfo fileInfo = baseMapper.selectOne(lambdaQueryWrapper);
-            if(fileInfo == null){
-                throw new ServiceException("目录不存在");
+    private Integer findParent(String parentPath, UserInfo currentUser){
+        if(StringUtils.hasLength(parentPath) && !GlobalConstant.ROOT_PATH.equals(parentPath)){
+            File parent = new File(parentPath);
+            FileInfo parentInfo = selectByPathName(parent.getPath(), parent.getName(), currentUser);
+            if (parentInfo == null){
+                throw new ServiceException("找不到父级目录");
             }
-            return fileInfo.getId();
+            return parentInfo.getId();
         }
-        throw new ServiceException("目录不能为空");
+        return null;
+    }
+
+    private FileInfo selectByPathName(String path, String name, UserInfo currentUser){
+        LambdaQueryWrapper<FileInfo> lambdaQueryWrapper = lambdaQueryWrapper(currentUser);
+        lambdaQueryWrapper.eq(FileInfo::getPath, path);
+        lambdaQueryWrapper.eq(FileInfo::getName, name);
+        return this.getOne(lambdaQueryWrapper);
     }
 
     private String getFileStorageId(String digest, Integer storageId){

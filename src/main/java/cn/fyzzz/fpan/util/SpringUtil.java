@@ -3,6 +3,7 @@ package cn.fyzzz.fpan.util;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import org.springframework.context.ApplicationEvent;
 import org.springframework.stereotype.Component;
 
 /**
@@ -12,18 +13,22 @@ import org.springframework.stereotype.Component;
 @Component
 public class SpringUtil implements ApplicationContextAware {
 
-    private ApplicationContext applicationContext;
+    private static ApplicationContext applicationContext;
 
-    public <T> T getBean(Class<T> clazz){
+    public static  <T> T getBean(Class<T> clazz){
         return applicationContext.getBean(clazz);
     }
 
-    public String[] getBeanNamesByType(Class<?> clazz){
+    public static String[] getBeanNamesByType(Class<?> clazz){
         return applicationContext.getBeanNamesForType(clazz);
+    }
+
+    public static void pushEvent(ApplicationEvent event) {
+        applicationContext.publishEvent(event);
     }
 
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        this.applicationContext = applicationContext;
+        SpringUtil.applicationContext = applicationContext;
     }
 }
